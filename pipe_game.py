@@ -6,7 +6,8 @@ pygame.init()
 #Settings
 window_width = 900
 window_height = 600
-fps = 120
+square_side = 10
+fps = 10
 clock = pygame.time.Clock()
 color_white = (255,255,255)
 color_black = (0, 0, 0)
@@ -18,16 +19,17 @@ game_window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('Automating Menchanical Engineering')
 
 #Sprites
-class Player1(pygame.sprite.Sprite):
-    def __init__(self):
+class Square(pygame.sprite.Sprite):
+    def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.size_x = 10
         self.size_y = 10
         self.image = pygame.Surface((self.size_x, self.size_y))
         self.image.fill(color_white)
         self.rect = self.image.get_rect()
-        self.rect.left = 25
-        self.rect.top = 0
+        self.rect.left = x
+        self.rect.top = y
+        self.is_occupied = False
 
     def update(self):
         self.dy = 0
@@ -35,26 +37,48 @@ class Player1(pygame.sprite.Sprite):
         #Movement
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_UP]:
-            self.dy = -3
-            self.size_y += 10
+            #self.size_y += 10
+            pass
         if keystate[pygame.K_DOWN]:
-            self.dy = 3
+            #self.size_x += 10
+            pass
         self.rect.y += self.dy
         self.image = pygame.Surface((self.size_x, self.size_y))
         self.image.fill(color_white)
 
-        #Constraints
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom > window_height:
-            self.rect.bottom = window_height
+class Pipe():
+    def __init__(self, start, end):
+        pygame.sprite.Sprite.__init__(self)
+        self.start = start
+        self.end = end
+        self.squares = []
+
+    def add_square(self):
+        global window_width
+        global window_height
+        x = random.randint(0, window_width)
+        y = random.randint(0, window_height)
+        new_square = Square(x, y)
+        self.squares.append(new_square)
+        all_sprites.add(new_square)
+        print(f'new sprite created at {x}, {y}')
+
+    def update(self):
+        pass
+        #Movement
+        keystate = pygame.key.get_pressed()
+        if keystate[pygame.K_UP]:
+            print('from update: self.squares is a ', type(self.squares))
+            self.squares.append(square)
+            self.add_square()
 
 #Sprite Groups
 all_sprites = pygame.sprite.Group()
-ball_sprite = pygame.sprite.GroupSingle()
 
-player1 = Player1()
-all_sprites.add(player1)
+square = Square(25, 0)
+anothersquare = Square(100, 0)
+pipe = Pipe((1,2), (3, 4))
+all_sprites.add(square, anothersquare)
 
 
 
@@ -70,18 +94,13 @@ while True:
             sys.exit()
     #update
     all_sprites.update()
-    ball_sprite.update()
+    pipe.update()
 
     #draw
         #Fill
     game_window.fill(color_black)
-        #Field
-#    pygame.draw.line(game_window, color_white, (window_width/2, 0), (window_width/2, window_height))
-#    pygame.draw.circle(game_window, color_white, (window_width//2, window_height//2), 80, 1)
-#    border = pygame.Rect(0, 0, window_width, window_height)
         #Sprites
     all_sprites.draw(game_window)
-    ball_sprite.draw(game_window)
 
 
     #flip
