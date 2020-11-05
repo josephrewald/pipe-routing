@@ -13,7 +13,6 @@ color_white = (255,255,255)
 color_black = (0, 0, 0)
 color_fuzzy = (255, 105, 180)
 
-
 #---Game Window---#
 game_window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('Automating Menchanical Engineering')
@@ -46,12 +45,13 @@ class Square(pygame.sprite.Sprite):
         self.image = pygame.Surface((self.size_x, self.size_y))
         self.image.fill(color_white)
 
-class Pipe():
+class Pipe(): #TODO Make this class a sprite group..? 
     def __init__(self, start, end):
         pygame.sprite.Sprite.__init__(self)
         self.start = start
         self.end = end
         self.squares = []
+        self.my_sprites = pygame.sprite.Group()
 
     def add_square(self):
         global window_width
@@ -60,50 +60,56 @@ class Pipe():
         y = random.randint(0, window_height)
         new_square = Square(x, y)
         self.squares.append(new_square)
-        all_sprites.add(new_square)
+        self.my_sprites.add(new_square)
         print(f'new sprite created at {x}, {y}')
 
     def update(self):
-        pass
         #Movement
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_UP]:
-            print('from update: self.squares is a ', type(self.squares))
-            self.squares.append(square)
+            #print('from update: self.squares is a ', type(self.squares))
+            #self.squares.append(square)
             self.add_square()
+        self.my_sprites.update()
+        #self.my_sprites.draw(game_window)
+        #self.squares.draw(game_window)
 
-#Sprite Groups
-all_sprites = pygame.sprite.Group()
+def main():
 
-square = Square(25, 0)
-anothersquare = Square(100, 0)
-pipe = Pipe((1,2), (3, 4))
-all_sprites.add(square, anothersquare)
+    #Sprite Groups
+    #all_sprites = pygame.sprite.Group()
+    
+    square = Square(25, 0)
+    anothersquare = Square(100, 0)
+    pipe = Pipe((1,2), (3, 4))
+    #all_sprites.add(square, anothersquare)
+    
+    #Game Loop
+    while True:
+        #Set framerate
+        clock.tick(fps)
+    
+        #Process events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        #update
+        #all_sprites.update()
+        pipe.update()
+    
+        #draw
+            #Fill
+        game_window.fill(color_black)
+            #Sprites
+        #all_sprites.draw(game_window)
+        pipe.my_sprites.draw(game_window)
+    
+    
+        #flip
+        pygame.display.flip()
+    
+    pygame.quit()
 
-
-
-#Game Loop
-while True:
-    #Set framerate
-    clock.tick(fps)
-
-    #Process events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    #update
-    all_sprites.update()
-    pipe.update()
-
-    #draw
-        #Fill
-    game_window.fill(color_black)
-        #Sprites
-    all_sprites.draw(game_window)
-
-
-    #flip
-    pygame.display.flip()
-
-pygame.quit()
+if __name__ == '__main__':
+    main()
