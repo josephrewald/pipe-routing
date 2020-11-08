@@ -21,21 +21,17 @@ game_window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('Automating Mechanical Engineering')
 
 
-def initialise_squares(window_width, window_height, square_side):
+def initialise_squares(window_width, window_height, square_side, grid):
     x = 0
     y = 0
-    all_squares = {}
-    while x < window_width:
-        while y < window_height:
+    while y*square_side < window_height:
+        while x*square_side < window_width:
             new_square = Square(x, y, square_side)
-            all_squares.update({(x, y): new_square})
-            x += square_side
-            y += square_side
+            grid.update({(x, y): new_square})
+            x += 1
             print(f'created square at {x}, {y}')
-    #while y < window_height:
-    #    pass
-    print(all_squares)
-    return all_squares
+        x = 0
+        y += 1
 
 
 def main():
@@ -45,9 +41,10 @@ def main():
     global window_width
     global window_height
     global square_side
-    #grid = initialise_squares(window_width, window_height, square_side)
+    grid = {}  #initialise_squares(window_width, window_height, square_side)
+    initialise_squares(window_width, window_height, square_side, grid)
 
-    pipe = Pipe((1, 2), (3, 4))
+    pipe = Pipe((0, 0), (0, 10), grid)
 
     # Game Loop
     while True:
@@ -59,7 +56,7 @@ def main():
                 sys.exit()
 
         # all_sprites.update()
-        pipe.update(game_window)
+        pipe.update(game_window, grid)
 
         #########game_window.fill(color_black)
         pipe.draw(game_window)
