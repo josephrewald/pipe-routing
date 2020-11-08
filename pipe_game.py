@@ -62,7 +62,7 @@ def main():
         pipe.update(game_window)
 
         #########game_window.fill(color_black)
-        #pipe.squares.draw(game_window)
+        pipe.draw(game_window)
         pygame.display.flip()
 
 
