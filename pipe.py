@@ -1,5 +1,6 @@
 import pygame
 import sys
+import time
 
 # Settings
 square_side = 10
@@ -15,43 +16,57 @@ class Pipe(pygame.sprite.Group):
         self.end = end
         self.ix = 0
         self.iy = 0
+        print('from __init__: self.start = ', self.start)
         self.add_square(self.start, grid)
+        print('from __init__: self.end = ', self.end)
         self.add_square(self.end, grid)
 
     def add_square(self, location, grid):
-        global square_side
         #x = location[0]  #int(input('enter x value'))
         #y = location[1]  #int(input('enter x value'))
-        new_square = grid[location]  #x, y, square_side)  # change to add existing square
-        self.add(new_square)
-        new_square.is_occupied = True
+        new_square = grid[location]
+        print('from add_square: location = ', location)
+        if new_square.is_occupied:
+            print('Square already occupied, choose another path.')
+            time.sleep(1)
+        else:
+            self.add(new_square)
+            print('entering else', ' - ', location)
+            self.front = location
+            new_square.is_occupied = True
         #print(f'new sprite created at {x}, {y}')
 
     def update(self, game_window, grid):
         key_state = pygame.key.get_pressed()
-        if key_state[pygame.K_DOWN]:
+        if key_state[pygame.K_j]:
             new_y = self.front[1] + 1
             new_x = self.front[0]
-            self.front = (new_x, new_y)
-            self.add_square((new_x, new_y), grid)
+            if grid[(new_x, new_y)].is_occupied:
+                print('Square already occupied, choose another path.')
+                time.sleep(5)
+            else:
+                self.front = (new_x, new_y)
+                self.add_square((new_x, new_y), grid)
             #TODO: Add no consuming preoccupied squares
-        if key_state[pygame.K_UP]:
+        if key_state[pygame.K_k]:
             new_y = self.front[1] - 1
             new_x = self.front[0]
-            self.front = (new_x, new_y)
+            #self.front = (new_x, new_y)
             self.add_square((new_x, new_y), grid)
-        if key_state[pygame.K_LEFT]:
+        if key_state[pygame.K_h]:
             new_y = self.front[1]
             new_x = self.front[0] - 1
-            self.front = (new_x, new_y)
+            #self.front = (new_x, new_y)
             self.add_square((new_x, new_y), grid)
-        if key_state[pygame.K_RIGHT]:
+        if key_state[pygame.K_l]:
             new_y = self.front[1]
             new_x = self.front[0] + 1
-            self.front = (new_x, new_y)
+            #self.front = (new_x, new_y)
             self.add_square((new_x, new_y), grid)
         #self.squares.update()
         if self.front == self.end:
+            print(self.front)
+            print(self.end)
             print('you win!!')
             sys.exit()
         self.draw(game_window)

@@ -47,6 +47,7 @@ def main():
     pipe = Pipe((0, 0), (0, 10), grid)
 
     # Game Loop
+    # TODO: turn game loop into a function called "run()" to modularise stuff
     while True:
         clock.tick(fps)
 
