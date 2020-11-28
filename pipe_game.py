@@ -30,6 +30,7 @@ def initialise_squares(window_width, window_height, square_side, grid):
             grid.update({(x, y): new_square})
             x += 1
             print(f'created square at {x}, {y}')
+            print(new_square.is_occupied)
         x = 0
         y += 1
 
@@ -45,6 +46,7 @@ def main():
     initialise_squares(window_width, window_height, square_side, grid)
 
     pipe = Pipe((0, 0), (0, 10), grid)
+    print(f'created pipe at {pipe.start}, {pipe.end}')
 
     # Game Loop
     # TODO: turn game loop into a function called "run()" to modularise stuff
@@ -56,6 +58,7 @@ def main():
                 pygame.quit()
                 sys.exit()
 
+        print(f'Running game loop - {pipe.start}, {pipe.end}')
         # all_sprites.update()
         pipe.update(game_window, grid)
 
