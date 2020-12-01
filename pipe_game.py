@@ -3,6 +3,7 @@ import sys
 from pipe import Pipe
 from square import Square
 
+# TODO: at 1000 lines, add tests, remove ugliness.
 # ---initialise Pygame---#
 pygame.init()
 
