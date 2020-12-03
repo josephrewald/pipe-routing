@@ -2,8 +2,6 @@ import pygame
 
 # Settings
 color_white = (255, 255, 255)
-color_black = (0, 0, 0)
-color_fuzzy = (255, 105, 180)
 
 
 class Square(pygame.sprite.Sprite):
@@ -17,9 +15,3 @@ class Square(pygame.sprite.Sprite):
         self.rect.left = x * side
         self.rect.top = y * side
         self.is_occupied = False
-
-    def update(self):
-        #self.image = pygame.Surface((self.x, self.y))
-        if self.is_occupied:
-            self.image.fill(color_white)
-            print('ran square update')
