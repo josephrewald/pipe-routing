@@ -2,6 +2,7 @@ import pygame
 import sys
 from pipe import Pipe
 from square import Square
+from wall import Wall
 
 # TODO: add initial AI: adds ~150 lines => ~300 LOC
 # TODO: add multiple pipes: adds <100 lines = ~400 LOC
@@ -42,6 +43,7 @@ def initialise_squares(window_width, window_height, square_side, grid):
             print(new_square.is_occupied)
         x = 0
         y += 1
+    print(grid)
 
 
 def main():
@@ -54,8 +56,9 @@ def main():
     grid = {}  # initialise_squares(window_width, window_height, square_side)
     initialise_squares(window_width, window_height, square_side, grid)
 
-    pipe = Pipe((0, 0), (0, 10), grid)
+    pipe = Pipe((5, 5), (5, 15), grid)
     print(f"created pipe at {pipe.start}, {pipe.end}")
+    wall = Wall(grid)
 
     # Game Loop
     # TODO: turn game loop into a function called "run()" to modularise stuff
@@ -70,6 +73,7 @@ def main():
         print(f"Running game loop - {pipe.start}, {pipe.end}")
         # all_sprites.update()
         pipe.update(game_window, grid)
+        wall.update(game_window, grid)
 
         #########game_window.fill(color_black)
         pipe.draw(game_window)

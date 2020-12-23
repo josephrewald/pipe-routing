@@ -1,3 +1,4 @@
 .*
 !.gitignore
 fizzbuzz_vim.py
+__pycache__/*
