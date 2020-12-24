@@ -1,0 +1,6 @@
+S_t: make tensor of square statuses + location of end of pipe
+A_t: 
+R_t:
+S_t+1: recompute the tensor
+
+copy all the RL code over and just start goin for it. 

@@ -13,6 +13,7 @@ class Pipe(pygame.sprite.Group):
         self.add_square(self.start, grid)
         end_square = grid[end]
         self.add(end_square)
+        self.done = False
 
     def add_square(self, location, grid):
         new_square = grid[location]
@@ -44,5 +45,6 @@ class Pipe(pygame.sprite.Group):
             self.add_square((new_x, new_y), grid)
         if self.front == self.end:
             print('you win!!')
-            sys.exit()
+            self.done = True
+            #sys.exit()
         self.draw(game_window)
