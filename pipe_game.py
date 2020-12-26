@@ -25,5 +25,6 @@ color_fuzzy = (255, 105, 180)
 
 if __name__ == "__main__":
     main_loop = MainLoop(window_width, window_height, square_side)
-    length = main_loop.episode()
-    print(length)
+    length, fuck_ups = main_loop.episode()
+    G = -(length + fuck_ups)
+    print(length, fuck_ups)

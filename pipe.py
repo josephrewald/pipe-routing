@@ -14,12 +14,14 @@ class Pipe(pygame.sprite.Group):
         end_square = grid[end]
         self.add(end_square)
         self.done = False
+        self.illegal_moves = 0
 
     def add_square(self, location, grid):
         new_square = grid[location]
         if new_square.is_occupied:
             print('Square already occupied, choose another path.')
             time.sleep(0.1)
+            self.illegal_moves += 1
         else:
             self.add(new_square)
             self.front = location

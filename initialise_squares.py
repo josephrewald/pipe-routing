@@ -12,4 +12,4 @@ def initialise_squares(window_width, window_height, square_side, grid):
             print(new_square.is_occupied)
         x = 0
         y += 1
-    print(grid)
+    #print(grid)
