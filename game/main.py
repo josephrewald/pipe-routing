@@ -5,15 +5,6 @@ from square import Square
 from wall import Wall
 from mygame import MyGame
 
-# TODO: add initial AI: adds ~150 lines => ~300 LOC
-# TODO: add multiple pipes: adds <100 lines = ~400 LOC
-# TODO: add 3rd dimension by using colour: adds 100 lines => 500 LOC
-# TODO: at 500 lines, add tests, remove ugliness.
-# TODO: create 3D version of the game with Open Cascade
-# TODO: apply AI to 3D version
-# TODO: optimise AI
-# Get rich!
-
 
 # Settings
 window_width = 900
