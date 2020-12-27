@@ -22,6 +22,7 @@ class MyGame():
         self.pipe = Pipe((5, 5), (5, 15), self.grid)
         self.wall = Wall(self.grid)
         self.state = torch.zeros([self.grid.size_x, self.grid.size_y])
+        
     
     def episode(self):
         while self.pipe.done == False:
@@ -32,6 +33,7 @@ class MyGame():
                     pygame.quit()
                     sys.exit()
     
+            # pipe update needs an action
             self.state = self.pipe.update(self.game_window, self.grid, self.state)
             self.wall.update(self.game_window, self.grid)
     
