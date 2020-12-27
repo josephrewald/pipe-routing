@@ -5,4 +5,3 @@ S_t+1: recompute the tensor
 
 copy all the RL code over and just start goin for it. 
 
-make main_loop be a descendant of pygmae and rename mygame!

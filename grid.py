@@ -1,33 +1,22 @@
 from square import Square
-import pygame
+import torch
 
-class grid(pygame.sprite.Group):
+class Grid(dict):
     def __init__(self, window_width, window_height, square_side):
-        pygame.sprite.Group.__init__(self)
-
         x = 0
         y = 0
         while y * square_side < window_height:
             while x * square_side < window_width:
                 new_square = Square(x, y, square_side)
-                self.add(new_square)
+                self.update({(x, y): new_square})
                 x += 1
-                print(f"created square at {x}, {y}")
-                print(new_square.is_occupied)
+            self.size_x = x
             x = 0
             y += 1
+        self.size_y = y
+        self.state = torch.zeros([self.size_x, self.size_y])
 
-
-def initialise_squares(window_width, window_height, square_side, grid):
-    x = 0
-    y = 0
-    while y * square_side < window_height:
-        while x * square_side < window_width:
-            new_square = Square(x, y, square_side)
-            grid.update({(x, y): new_square})
-            x += 1
-            print(f"created square at {x}, {y}")
-            print(new_square.is_occupied)
-        x = 0
-        y += 1
-    #print(grid)
+    def update_state(self):
+        for (x, y) in self.keys():
+            self.state[x][y] = int(self[(x, y)].is_occupied)
+        return self.state
