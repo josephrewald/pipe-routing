@@ -16,11 +16,11 @@ class DQN(nn.Module):
         self.out = nn.Linear(in_features=32, out_features=4)
         
     def forward(self, t):
-        print(t.size())
-        time.sleep(5) 
+        #print(t.size())
+        #time.sleep(5) 
         t = t.flatten(start_dim=0) 
-        print(t.size())
-        time.sleep(5) 
+        #print(t.size())
+        #time.sleep(5) 
         t = F.relu(self.fc1(t))
         t = F.relu(self.fc2(t))
         t = F.relu(self.fc3(t))

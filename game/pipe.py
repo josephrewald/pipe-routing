@@ -39,26 +39,26 @@ class Pipe(pygame.sprite.Group):
         return state
 
     def update(self, game_window, new_state):
-        key_state = pygame.key.get_pressed()
+        #key_state = pygame.key.get_pressed()
         current_state = self.get_state()
         print(current_state)
         action = self.agent.select_action(current_state, self.policy_net)
-        if key_state[pygame.K_j]:
+        if action == 0: #key_state[pygame.K_j]:
             new_y = self.front[1] + 1
             new_x = self.front[0]
             new_state = self.add_square((new_x, new_y))
-        if key_state[pygame.K_k]:
+        if action == 1: #key_state[pygame.K_k]:
             new_y = self.front[1] - 1
             new_x = self.front[0]
-            new_state = self.add_square((new_x, new_y), grid)
-        if key_state[pygame.K_h]:
+            new_state = self.add_square((new_x, new_y))
+        if action == 2: #key_state[pygame.K_h]:
             new_y = self.front[1]
             new_x = self.front[0] - 1
-            new_state = self.add_square((new_x, new_y), grid)
-        if key_state[pygame.K_l]:
+            new_state = self.add_square((new_x, new_y))
+        if action == 3: #key_state[pygame.K_l]:
             new_y = self.front[1]
             new_x = self.front[0] + 1
-            new_state = self.add_square((new_x, new_y), grid)
+            new_state = self.add_square((new_x, new_y))
         if self.front == self.end:
             print('you win!!')
             self.done = True
