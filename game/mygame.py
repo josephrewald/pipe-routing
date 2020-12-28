@@ -1,8 +1,8 @@
-from pipe import Pipe
-from wall import Wall
+from game.pipe import Pipe
+from game.wall import Wall
 import pygame
 import sys
-from grid import Grid
+from game.grid import Grid
 import torch
 import time
 

@@ -1,18 +1,18 @@
 from itertools import count
 import torch
 import torch.optim as optim
-from ray import tune
+#from ray import tune
 import torch.nn.functional as F
 import numpy as np
 
-from agent import Agent
-from dqn import DQN
-from env_manager import CartPoleEnvManager
-from epsilon_greedy_strategy import EpsilonGreedyStrategy
-from experience import Experience
-from q_values import QValues
-from replay_memory import ReplayMemory
-from utils import plot, get_moving_average, extract_tensors
+from AI.agent import Agent
+from AI.dqn import DQN
+from AI.env_manager import CartPoleEnvManager
+from AI.epsilon_greedy_strategy import EpsilonGreedyStrategy
+from AI.experience import Experience
+from AI.q_values import QValues
+from AI.replay_memory import ReplayMemory
+from AI.utils import plot, get_moving_average, extract_tensors
 
 
 def training_function(config):

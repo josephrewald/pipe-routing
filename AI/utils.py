@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import torch
-from experience import Experience
+from AI.experience import Experience
 
 def plot(values, moving_avg_period, config):
     title = 'batch_size: ' + str(config['batch_size']) + \

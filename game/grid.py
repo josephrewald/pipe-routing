@@ -1,4 +1,4 @@
-from square import Square
+from game.square import Square
 import torch
 
 class Grid(dict):
