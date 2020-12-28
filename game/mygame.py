@@ -9,7 +9,8 @@ import time
 
 #pygame.init()
 class MyGame():
-    def __init__(self, window_width, window_height, square_side, fps=10):
+    def __init__(self, window_width, window_height, square_side,\
+            agent, policy_net, grid, fps=10):
         self.window_width = window_width
         self.window_height = window_height
         self.square_side = square_side
@@ -18,8 +19,8 @@ class MyGame():
         self.game_window = pygame.display.set_mode((window_width, window_height))
         #self.pygame.display.set_caption("Automating Mechanical Engineering")
 
-        self.grid = Grid(window_width, window_height, square_side)
-        self.pipe = Pipe((5, 5), (5, 15), self.grid)
+        self.grid = grid
+        self.pipe = Pipe((5, 5), (5, 15), self.grid, agent, policy_net)
         self.wall = Wall(self.grid)
         self.state = torch.zeros([self.grid.size_x, self.grid.size_y])
         
@@ -34,7 +35,7 @@ class MyGame():
                     sys.exit()
     
             # pipe update needs an action
-            self.state = self.pipe.update(self.game_window, self.grid, self.state)
+            self.state = self.pipe.update(self.game_window, self.state)
             self.wall.update(self.game_window, self.grid)
     
             self.pipe.draw(self.game_window)

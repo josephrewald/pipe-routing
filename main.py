@@ -8,6 +8,7 @@ from game.pipe import Pipe
 from game.square import Square
 from game.wall import Wall
 from game.mygame import MyGame
+from game.grid import Grid
 
 from AI.agent import Agent
 from AI.dqn import DQN
@@ -42,12 +43,13 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 if __name__ == "__main__":
-    game = MyGame(window_width, window_height, square_side)
     strategy = EpsilonGreedyStrategy(eps_start, eps_end, eps_decay)
     agent = Agent(strategy, 4, device)
     memory = ReplayMemory(memory_size)
-    policy_net = DQN(game.grid.size_x, game.grid.size_y).to(device)
-    target_net = DQN(game.grid.size_x, game.grid.size_y).to(device)
+    grid = Grid(window_width, window_height, square_side)
+    policy_net = DQN(grid.size_x, grid.size_y).to(device)
+    game = MyGame(window_width, window_height, square_side, agent, policy_net, grid)
+    target_net = DQN(grid.size_x, grid.size_y).to(device)
     target_net.load_state_dict(policy_net.state_dict())
     target_net.eval()
     optimizer = optim.Adam(params=policy_net.parameters(), lr=lr)
