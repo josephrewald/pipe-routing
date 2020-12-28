@@ -17,4 +17,4 @@ class Agent():
             return torch.tensor([action]).to(self.device) # explore      
         else:
             with torch.no_grad():
-                return policy_net(state).argmax(dim=1).to(self.device) # exploit
+                return policy_net(state).argmax(dim=0).to(self.device) # exploit

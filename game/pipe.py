@@ -40,7 +40,9 @@ class Pipe(pygame.sprite.Group):
 
     def update(self, game_window, new_state):
         key_state = pygame.key.get_pressed()
-        #action = self.agent.select_action(self.get_state(), self.policy_net)
+        current_state = self.get_state()
+        print(current_state)
+        action = self.agent.select_action(current_state, self.policy_net)
         if key_state[pygame.K_j]:
             new_y = self.front[1] + 1
             new_x = self.front[0]
