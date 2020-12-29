@@ -23,7 +23,7 @@ class Pipe(pygame.sprite.Group):
         new_square = self.grid[location]
         if new_square.is_occupied:
             print('Square already occupied, choose another path.')
-            time.sleep(0.1)
+            #time.sleep(0.1)
             self.illegal_moves += 1
         else:
             self.add(new_square)
@@ -41,24 +41,35 @@ class Pipe(pygame.sprite.Group):
     def update(self, game_window, new_state):
         #key_state = pygame.key.get_pressed()
         current_state = self.get_state()
-        print(current_state)
         action = self.agent.select_action(current_state, self.policy_net)
-        if action == 0: #key_state[pygame.K_j]:
-            new_y = self.front[1] + 1
-            new_x = self.front[0]
-            new_state = self.add_square((new_x, new_y))
-        if action == 1: #key_state[pygame.K_k]:
-            new_y = self.front[1] - 1
-            new_x = self.front[0]
-            new_state = self.add_square((new_x, new_y))
-        if action == 2: #key_state[pygame.K_h]:
-            new_y = self.front[1]
-            new_x = self.front[0] - 1
-            new_state = self.add_square((new_x, new_y))
-        if action == 3: #key_state[pygame.K_l]:
-            new_y = self.front[1]
-            new_x = self.front[0] + 1
-            new_state = self.add_square((new_x, new_y))
+        square_down = (self.front[0], self.front[1] + 1)
+        square_up = (self.front[0], self.front[1] - 1)
+        square_left = (self.front[0] - 1, self.front[1])
+        square_right = (self.front[0] + 1, self.front[1])
+        stuck = self.grid[square_down].is_occupied and \
+                self.grid[square_left].is_occupied and \
+                self.grid[square_right].is_occupied and \
+                self.grid[square_up].is_occupied 
+        if stuck:
+            print("you lose")
+            self.illegal_moves += 100
+            self.done = True
+        if action == 0: #key_state[pygame.K_j]: # DOWN
+            #new_y = self.front[1] + 1
+            #new_x = self.front[0]
+            new_state = self.add_square(square_down)
+        if action == 1: #key_state[pygame.K_k]: # UP
+            #new_y = self.front[1] - 1
+            #new_x = self.front[0]
+            new_state = self.add_square(square_up)
+        if action == 2: #key_state[pygame.K_h]: # LEFT
+            #new_y = self.front[1]
+            #new_x = self.front[0] - 1
+            new_state = self.add_square(square_left)
+        if action == 3: #key_state[pygame.K_l]: # RIGHT
+            #new_y = self.front[1]
+            #new_x = self.front[0] + 1
+            new_state = self.add_square(square_right)
         if self.front == self.end:
             print('you win!!')
             self.done = True
