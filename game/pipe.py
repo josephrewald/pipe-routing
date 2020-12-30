@@ -3,7 +3,7 @@ import sys
 import time
 
 class Pipe(pygame.sprite.Group):
-    def __init__(self, start, end, grid, agent, policy_net):
+    def __init__(self, start, end, grid):
         pygame.sprite.Group.__init__(self)
         self.illegal_moves = 0
         self.start = start
@@ -16,8 +16,8 @@ class Pipe(pygame.sprite.Group):
         end_square = self.grid[end]
         self.add(end_square)
         self.done = False
-        self.agent = agent
-        self.policy_net = policy_net
+        #self.agent = agent
+        #self.policy_net = policy_net
 
     def add_square(self, location):
         new_square = self.grid[location]
@@ -41,9 +41,9 @@ class Pipe(pygame.sprite.Group):
     # pass game_window to pipe in __init__
     # don't pass new_state to update...? 
     # don't pass agent to pipe at init, do it here. 
-    def update(self, game_window):
+    def update(self, action, game_window):
         current_state = self.get_state()
-        chosen_action = self.agent.select_action(current_state, self.policy_net)
+        #chosen_action = self.agent.select_action(current_state, self.policy_net)
         next_square_dict = {'down'  : (self.front[0], self.front[1] + 1),
                             'up'    : (self.front[0], self.front[1] - 1),
                             'left'  : (self.front[0] - 1, self.front[1]),
@@ -64,12 +64,12 @@ class Pipe(pygame.sprite.Group):
             return current_state
         else:
             #print(next_squares)
-            print(int(chosen_action))
+            #print(int(chosen_action))
             #print(actions)
-            new_state = self.add_square(next_square_dict[actions[int(chosen_action)]])
+            new_state = self.add_square(next_square_dict[actions[action]])
         if self.front == self.end:
             print('you win!!')
             self.done = True
             #sys.exit()
         self.draw(game_window)
-        return new_state
+        return 1
