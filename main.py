@@ -22,8 +22,8 @@ from AI.training_function import training_function
 
 
 # Settings
-window_width = 900
-window_height = 600
+window_width = 100
+window_height = 100
 square_side = 10
 color_white = (255, 255, 255)
 color_black = (0, 0, 0)
@@ -48,13 +48,15 @@ if __name__ == "__main__":
     memory = ReplayMemory(memory_size)
     grid = Grid(window_width, window_height, square_side)
     policy_net = DQN(grid.size_x, grid.size_y).to(device)
-    game = MyGame(window_width, window_height, square_side, agent, policy_net, grid)
     target_net = DQN(grid.size_x, grid.size_y).to(device)
     target_net.load_state_dict(policy_net.state_dict())
     target_net.eval()
     optimizer = optim.Adam(params=policy_net.parameters(), lr=lr)
     
-    episode_durations = []
-    length, fuck_ups = game.episode()
-    G = -(length + fuck_ups)
-    print(length, fuck_ups)
+    episode_scores = []
+    for _ in range(num_episodes):
+        grid = Grid(window_width, window_height, square_side)
+        game = MyGame(window_width, window_height, square_side, agent, policy_net, grid)
+        length, fuck_ups = game.episode()
+        score = -(length + fuck_ups)
+        episode_scores.append(score)

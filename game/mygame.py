@@ -20,13 +20,16 @@ class MyGame():
         #self.pygame.display.set_caption("Automating Mechanical Engineering")
 
         self.grid = grid
-        self.pipe = Pipe((5, 5), (5, 15), self.grid, agent, policy_net)
+        self.pipe = Pipe((2, 2), (2, 5), self.grid, agent, policy_net)
         self.wall = Wall(self.grid)
+        self.grid.update()
+        self.wall.update(self.game_window, self.grid)
         self.state = torch.zeros([self.grid.size_x, self.grid.size_y])
         
     
     def episode(self):
         while self.pipe.done == False:
+            #_ = input()
             self.clock.tick(self.fps)
     
             for event in pygame.event.get():
@@ -35,7 +38,7 @@ class MyGame():
                     sys.exit()
     
             # pipe update needs an action
-            self.state = self.pipe.update(self.game_window, self.state)
+            self.state = self.pipe.update(self.game_window)
             self.wall.update(self.game_window, self.grid)
     
             self.pipe.draw(self.game_window)

@@ -24,7 +24,7 @@ class Wall(pygame.sprite.Group):
         new_square = grid[location]
         if new_square.is_occupied:
             print('Square already occupied, choose another path.')
-            time.sleep(0.1)
+            #time.sleep(0.1)
         else:
             self.add(new_square)
             self.front = location

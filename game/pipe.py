@@ -5,6 +5,7 @@ import time
 class Pipe(pygame.sprite.Group):
     def __init__(self, start, end, grid, agent, policy_net):
         pygame.sprite.Group.__init__(self)
+        self.illegal_moves = 0
         self.start = start
         self.front = self.start
         self.end = end
@@ -15,7 +16,6 @@ class Pipe(pygame.sprite.Group):
         end_square = self.grid[end]
         self.add(end_square)
         self.done = False
-        self.illegal_moves = 0
         self.agent = agent
         self.policy_net = policy_net
 
@@ -38,52 +38,35 @@ class Pipe(pygame.sprite.Group):
         state[front_x][front_y] += 1
         return state
 
-    def update(self, game_window, new_state):
+    # pass game_window to pipe in __init__
+    # don't pass new_state to update...? 
+    # don't pass agent to pipe at init, do it here. 
+    def update(self, game_window):
         current_state = self.get_state()
-        action = self.agent.select_action(current_state, self.policy_net)
-
-
-        next_squares = {    'down'  : (self.front[0], self.front[1] + 1),
+        chosen_action = self.agent.select_action(current_state, self.policy_net)
+        next_square_dict = {'down'  : (self.front[0], self.front[1] + 1),
                             'up'    : (self.front[0], self.front[1] - 1),
                             'left'  : (self.front[0] - 1, self.front[1]),
                             'right' : (self.front[0] + 1, self.front[1])}
-
-
-        square_down = (self.front[0], self.front[1] + 1)
-        square_up = (self.front[0], self.front[1] - 1)
-        square_left = (self.front[0] - 1, self.front[1])
-        square_right = (self.front[0] + 1, self.front[1])
-
-
-        stuck = self.grid[square_down].is_occupied and \
-                self.grid[square_left].is_occupied and \
-                self.grid[square_right].is_occupied and \
-                self.grid[square_up].is_occupied 
-
-
+        next_square_vals = next_square_dict.values()
+        next_square_obs = [self.grid[x] for x in next_square_vals]
+        occupied_squares = [x.is_occupied for x in next_square_obs]
+        stuck = all(occupied_squares)
         actions = { 0 : 'down', 
                     1 : 'up',
                     2 : 'left',
                     3 : 'right'}
 
-
         if stuck:
             print("you lose")
-            self.illegal_moves += 100
+            self.illegal_moves += 100 #TODO grid size x*y
             self.done = True
+            return current_state
         else:
-            print(next_squares)
-            print(action)
-            print(actions)
-            new_state = self.add_square(next_squares[actions[int(action)]])
-        #if action == 0: #key_state[pygame.K_j]: # DOWN
-        #    new_state = self.add_square(square_down)
-        #if action == 1: #key_state[pygame.K_k]: # UP
-        #    new_state = self.add_square(square_up)
-        #if action == 2: #key_state[pygame.K_h]: # LEFT
-        #    new_state = self.add_square(square_left)
-        #if action == 3: #key_state[pygame.K_l]: # RIGHT
-        #    new_state = self.add_square(square_right)
+            #print(next_squares)
+            print(int(chosen_action))
+            #print(actions)
+            new_state = self.add_square(next_square_dict[actions[int(chosen_action)]])
         if self.front == self.end:
             print('you win!!')
             self.done = True
