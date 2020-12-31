@@ -3,6 +3,7 @@ import sys
 
 import torch
 import torch.optim as optim
+import torch.nn.functional as F
 
 from game.pipe import Pipe
 from game.square import Square
@@ -59,14 +60,34 @@ if __name__ == "__main__":
         game = MyGame(window_width, window_height, square_side, grid)
         current_state = game.pipe.get_state()
         score = 0
+        i = 0
         while not game.pipe.done:
-            action = int(agent.select_action(current_state, policy_net))
-            reward = game.time_step(action)
+            i +=1
+            print(i)
+            action = agent.select_action(current_state, policy_net)
+            reward = game.time_step(int(action))
             next_state = game.pipe.get_state()
             #reward = -(length + illegal_moves)
             score += reward
-            memory.push(Experience(next_state, action, next_state, reward))
+            memory.push(Experience(current_state, action, next_state, reward))
             current_state = next_state
+
+            if memory.can_provide_sample(batch_size):
+                experiences = memory.sample(batch_size)
+                # :( next line problem
+                states, actions, rewards, next_states = extract_tensors(experiences)
+                current_q_values = QValues.get_current(policy_net, states, actions)
+                next_q_values = QValues.get_next(target_net, next_states)
+                target_q_values = (next_q_values * gamma) + rewards
+
+                loss = F.mse_loss(current_q_values, target_q_values.unsqueeze(1))
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+
+            if episode % target_update == 0:
+                target_net.load_state_dict(policy_net.state_dict())
+
             #game.state = game.pipe.update(game.game_window)
             #game.wall.update(game.game_window, grid)
             #game.pipe.draw(game.game_window)
@@ -75,7 +96,7 @@ if __name__ == "__main__":
         episode_scores.append(score)
         # add if memory.can_provide_sample....
         # add if episode % target_update...
-        # add plot
+        #plot(episode_scores, 100)
 
 
 

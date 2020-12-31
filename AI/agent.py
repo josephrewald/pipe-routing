@@ -13,8 +13,10 @@ class Agent():
         self.current_step += 1
 
         if rate > random.random():
+            print('explore')
             action = random.randrange(self.num_actions)
             return torch.tensor([action]).to(self.device) # explore      
         else:
+            print('exploit')
             with torch.no_grad():
                 return policy_net(state).argmax(dim=0).to(self.device) # exploit
